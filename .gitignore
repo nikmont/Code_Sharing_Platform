@@ -1,0 +1,9 @@
+# Project exclude paths
+/.gradle/
+/Code Sharing Platform/task/build/
+/Code Sharing Platform/task/out/
+/Code Sharing Platform/task/out/production/classes/
+/Problems/Find integer values of Log levels/out/
+/Problems/Find integer values of Log levels/out/production/classes/
+/Problems/Smart house/out/
+/Problems/Smart house/out/production/classes/

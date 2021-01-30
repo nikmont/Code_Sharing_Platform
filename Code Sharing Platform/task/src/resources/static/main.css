@@ -1,0 +1,14 @@
+textarea {
+    width: 400px;
+    height: 150px;
+}
+
+#load_date {
+    color: green;
+}
+
+#code_snippet {
+    width: 700px;
+    background-color: lightgray;
+    border: gray;
+}
