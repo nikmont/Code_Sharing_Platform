@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public class Code {
 
-    private String code_snippet = "";
+    private String code_snippet;
     private LocalDateTime date;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -34,4 +34,5 @@ public class Code {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+
 }

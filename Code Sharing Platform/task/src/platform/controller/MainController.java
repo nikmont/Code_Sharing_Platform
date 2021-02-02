@@ -1,46 +1,28 @@
 package platform.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import platform.model.Code;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.time.LocalDateTime;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@RestController
+@Controller
 public class MainController {
 
-    private Code codeSnip = new Code();
+    private final CodeService service;
 
-
-    @GetMapping("/code")
-    public ResponseEntity<String> getCode() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set(CONTENT_TYPE, TEXT_HTML_VALUE);
-        String htmlFileContent = "";
-        try {
-            File resource = new ClassPathResource("static/snippet.html").getFile();
-            htmlFileContent = new String(Files.readAllBytes(resource.toPath()));
-            htmlFileContent = htmlFileContent.replace("{date}", codeSnip.getDate());
-            htmlFileContent = htmlFileContent.replace("{code_snippet}", codeSnip.getCode());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.ok()
-                .headers(responseHeaders)
-                .body(htmlFileContent);
+    @Autowired
+    public MainController(CodeService codeservice) {
+        this.service = codeservice;
     }
 
     @GetMapping("/code/new")
@@ -60,27 +42,40 @@ public class MainController {
                 .body(htmlFileContent);
     }
 
-    @GetMapping("/api/code")
-    public ResponseEntity<Code> getContent() {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
-
-        return ResponseEntity.ok()
-                .headers(responseHeaders)
-                .body(codeSnip);
+    @GetMapping("/code/latest")
+    public String getLatestPage(Model model) {
+        model.addAttribute("codes", service.getLatest());
+        return "latest";
     }
 
-    @PostMapping("/api/code/new")
-    public String  createNew(@RequestBody Code code) {
+//    @GetMapping("/code")
+//    public ResponseEntity<String> getCode() {
 //        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
-
-        codeSnip.setCode(code.getCode());
-        codeSnip.setDate(LocalDateTime.now());
-
-        return "{}";
+//        responseHeaders.set(CONTENT_TYPE, TEXT_HTML_VALUE);
+//        String htmlFileContent = "";
+//        try {
+//            File resource = new ClassPathResource("static/snippet.html").getFile();
+//            htmlFileContent = new String(Files.readAllBytes(resource.toPath()));
+//            htmlFileContent = htmlFileContent.replace("{date}", codeSnip.getDate());
+//            htmlFileContent = htmlFileContent.replace("{code_snippet}", codeSnip.getCode());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
 //        return ResponseEntity.ok()
-//                .headers(responseHeaders).build();
-    }
+//                .headers(responseHeaders)
+//                .body(htmlFileContent);
+//    }
+
+//    @GetMapping("/code/{id}")
+//    public ResponseEntity<String> showById(@PathVariable int id) {
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.set(CONTENT_TYPE, TEXT_HTML_VALUE);
+//
+//        //вместо snippet
+//        return ResponseEntity.ok()
+//                .headers(responseHeaders)
+//                .body("");
+//    }
 
 }
