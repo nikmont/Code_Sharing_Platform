@@ -2,14 +2,14 @@
 <head>
     <title>Create</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/main.css">
+    <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
-    <textarea id="code_snippet" style="width: 400px; height: 150px; background-color: lightgray"> // write your code here </textarea>
-    <br><br>
-    <button id="send_snippet" type="submit" onclick="send()"> Submit </button>
-    <script>
-        function send() {
+<textarea id="code_snippet"> // write your code here </textarea>
+<br><br>
+<button id="send_snippet" type="submit" onclick="send()"> Submit</button>
+<script>
+    function send() {
         let object = {
             "code": document.getElementById("code_snippet").value
         };
@@ -25,6 +25,6 @@
             alert("Success!");
         }
     }
-    </script>
+</script>
 </body>
 </html>

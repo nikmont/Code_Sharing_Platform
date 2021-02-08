@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Latest</title>
+    <title>Code</title>
     <meta charset="UTF-8">
     <link href="/css/main.css" rel="stylesheet">
     <link rel="stylesheet"
@@ -10,11 +10,7 @@
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
-<#list codes as code>
-    <div>
-        <span id="load_date">${code.getDate()}</span>
-        <pre id="code_snippet"><code>${code.getCode()}</code></pre>
-    </div>
-</#list>
+    <span id="load_date">${code.getDate()}</span>
+    <pre id="code_snippet"><code>${code.getCode()}</code></pre>
 </body>
 </html>

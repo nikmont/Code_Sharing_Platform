@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,34 +49,10 @@ public class MainController {
         return "latest";
     }
 
-//    @GetMapping("/code")
-//    public ResponseEntity<String> getCode() {
-//        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.set(CONTENT_TYPE, TEXT_HTML_VALUE);
-//        String htmlFileContent = "";
-//        try {
-//            File resource = new ClassPathResource("static/snippet.html").getFile();
-//            htmlFileContent = new String(Files.readAllBytes(resource.toPath()));
-//            htmlFileContent = htmlFileContent.replace("{date}", codeSnip.getDate());
-//            htmlFileContent = htmlFileContent.replace("{code_snippet}", codeSnip.getCode());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return ResponseEntity.ok()
-//                .headers(responseHeaders)
-//                .body(htmlFileContent);
-//    }
-
-//    @GetMapping("/code/{id}")
-//    public ResponseEntity<String> showById(@PathVariable int id) {
-//        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.set(CONTENT_TYPE, TEXT_HTML_VALUE);
-//
-//        //вместо snippet
-//        return ResponseEntity.ok()
-//                .headers(responseHeaders)
-//                .body("");
-//    }
+    @GetMapping("/code/{id}")
+    public String showById(@PathVariable int id, Model model) {
+        model.addAttribute("code", service.getById(id));
+        return "snippet";
+    }
 
 }

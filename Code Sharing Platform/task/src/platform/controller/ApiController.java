@@ -51,7 +51,7 @@ public class ApiController {
 
         return ResponseEntity.ok()
                 .headers(responseHeaders)
-                .body(Collections.singletonMap("id", autoincr)); //("id", autoincr+"")
+                .body(Collections.singletonMap("id", "" + autoincr));
     }
 
 }
