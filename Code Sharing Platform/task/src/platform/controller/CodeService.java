@@ -1,38 +1,36 @@
 package platform.controller;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import platform.model.Code;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
+import platform.repo.CodeRepository;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
-@Component
+@Service
 public class CodeService {
 
-    private List<Code> list = new LinkedList<>();
+    private final CodeRepository repository;
+
+    @Autowired
+    public CodeService(CodeRepository repository) {
+        this.repository = repository;
+    }
 
     public void add(Code code) {
-        list.add(code);
+        repository.save(code);
     }
 
-    public Code getById(int id) {
-        return list.get(--id);
+    public List <Code> getLatestById() {
+        return repository.findTop10ByOrderByIdDesc();
     }
 
-    public List<Code> getLatest() {
-        List<Code> latest = new ArrayList<>(list);
-        Collections.reverse(latest);
+    public Code getById(long id) {
 
-        if (list.size() <= 10) {
-            return latest;
-        }
+        Optional<Code> code = repository.findById(id);
 
-        return latest.stream()
-                .limit(10)
-                .collect(Collectors.toList());
+        return code.orElseThrow(
+                () -> new IllegalStateException("Code snippet not found"));
     }
 
 }

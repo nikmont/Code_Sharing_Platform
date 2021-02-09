@@ -1,22 +1,38 @@
 package platform.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
+@Table(name="code")
 public class Code {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
+    private Long id;
     private String code_snippet;
     private LocalDateTime date;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    public Code() { }
+
     public Code(String code_snippet, LocalDateTime date) {
+
         this.code_snippet = code_snippet;
         this.date = date;
+
     }
 
-    public Code() {
-        this.code_snippet = "public static void ...";
-        this.date = LocalDateTime.parse("2021-01-29T19:47:59.711568900");
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCode() {

@@ -45,7 +45,7 @@ public class MainController {
 
     @GetMapping("/code/latest")
     public String getLatestPage(Model model) {
-        model.addAttribute("codes", service.getLatest());
+        model.addAttribute("codes", service.getLatestById());
         return "latest";
     }
 

@@ -17,7 +17,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 public class ApiController {
 
-    private int autoincr = 0;
     private final CodeService service;
 
     @Autowired
@@ -26,7 +25,7 @@ public class ApiController {
     }
 
     @GetMapping("/api/code/{id}")
-    public ResponseEntity<Code> getById(@PathVariable int id) {
+    public ResponseEntity<Code> getById(@PathVariable long id) {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
 
@@ -37,7 +36,7 @@ public class ApiController {
 
     @GetMapping("/api/code/latest")
     public List<Code> getLatest() {
-        return service.getLatest();
+        return service.getLatestById();
     }
 
     @PostMapping("/api/code/new")
@@ -47,11 +46,10 @@ public class ApiController {
 
         accepted.setDate(LocalDateTime.now());
         service.add(accepted);
-        autoincr++;
 
         return ResponseEntity.ok()
                 .headers(responseHeaders)
-                .body(Collections.singletonMap("id", "" + autoincr));
+                .body(Collections.singletonMap("id", "" + accepted.getId()));
     }
 
 }
