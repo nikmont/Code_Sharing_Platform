@@ -11,6 +11,11 @@
 </head>
 <body>
     <span id="load_date">${code.getDate()}</span>
+    <br>
+    <span id="views_restriction">${code.getViews()} more views allowed</span>
+    <br>
+    <span id="time_restriction">The code will be available for ${code.getTime()} seconds</span>
+    <br>
     <pre id="code_snippet"><code>${code.getCode()}</code></pre>
 </body>
 </html>

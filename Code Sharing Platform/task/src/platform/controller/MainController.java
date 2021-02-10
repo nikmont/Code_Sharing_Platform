@@ -50,8 +50,8 @@ public class MainController {
     }
 
     @GetMapping("/code/{id}")
-    public String showById(@PathVariable int id, Model model) {
-        model.addAttribute("code", service.getById(id));
+    public String showById(@PathVariable String id, Model model) {
+        model.addAttribute("code", service.getByUUID(id));
         return "snippet";
     }
 

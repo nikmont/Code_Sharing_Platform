@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -25,13 +26,13 @@ public class ApiController {
     }
 
     @GetMapping("/api/code/{id}")
-    public ResponseEntity<Code> getById(@PathVariable long id) {
+    public ResponseEntity<Code> getById(@PathVariable String id) {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
 
         return ResponseEntity.ok()
                 .headers(responseHeaders)
-                .body(service.getById(id));
+                .body(service.getByUUID(id));
     }
 
     @GetMapping("/api/code/latest")
@@ -45,11 +46,12 @@ public class ApiController {
         responseHeaders.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
 
         accepted.setDate(LocalDateTime.now());
+        accepted.setUUID(UUID.randomUUID().toString());
         service.add(accepted);
 
         return ResponseEntity.ok()
                 .headers(responseHeaders)
-                .body(Collections.singletonMap("id", "" + accepted.getId()));
+                .body(Collections.singletonMap("id", "" + accepted.getUUID()));
     }
 
 }

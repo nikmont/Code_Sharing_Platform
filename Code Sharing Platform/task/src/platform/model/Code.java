@@ -1,6 +1,7 @@
 package platform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,15 +17,21 @@ public class Code {
     private Long id;
     private String code_snippet;
     private LocalDateTime date;
+    private Long time;
+    private int views;
+
+    @JsonIgnore
+    private String UUID;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Code() { }
 
-    public Code(String code_snippet, LocalDateTime date) {
-
+    public Code(String code_snippet, LocalDateTime date, Long time, int views, String UUID) {
         this.code_snippet = code_snippet;
         this.date = date;
-
+        this.time = time;
+        this.views = views;
+        this.UUID = UUID;
     }
 
     public Long getId() {
@@ -51,4 +58,28 @@ public class Code {
         this.date = date;
     }
 
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    @JsonIgnore
+    public String getUUID() {
+        return UUID;
+    }
+
+    public void setUUID(String UUID) {
+        this.UUID = UUID;
+    }
 }

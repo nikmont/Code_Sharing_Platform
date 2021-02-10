@@ -1,7 +1,9 @@
 package platform.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import platform.model.Code;
 import platform.repo.CodeRepository;
 import java.util.List;
@@ -21,16 +23,18 @@ public class CodeService {
         repository.save(code);
     }
 
-    public List <Code> getLatestById() {
+    public List <Code> getLatestById() { //только по условиям просмотров и времени
         return repository.findTop10ByOrderByIdDesc();
     }
 
-    public Code getById(long id) {
+    public Code getByUUID(String id) {
 
-        Optional<Code> code = repository.findById(id);
+        Optional<Code> code = repository.findCodeByUUID(id);
 
         return code.orElseThrow(
-                () -> new IllegalStateException("Code snippet not found"));
+                () -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Invalid UUID"
+                ));
     }
 
 }
