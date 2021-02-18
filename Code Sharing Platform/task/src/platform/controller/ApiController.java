@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import platform.model.Code;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -25,6 +22,31 @@ public class ApiController {
         this.service = service;
     }
 
+
+
+
+
+
+    @GetMapping("/api/code/latest")
+    public List<Code> getLatest() {
+        return service.getLatestById();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("/api/code/{id}")
     public ResponseEntity<Code> getById(@PathVariable String id) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -35,11 +57,6 @@ public class ApiController {
                 .body(service.getByUUID(id));
     }
 
-    @GetMapping("/api/code/latest")
-    public List<Code> getLatest() {
-        return service.getLatestById();
-    }
-
     @PostMapping("/api/code/new")
     public ResponseEntity<Map> createNew(@RequestBody Code accepted) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -47,6 +64,12 @@ public class ApiController {
 
         accepted.setDate(LocalDateTime.now());
         accepted.setUUID(UUID.randomUUID().toString());
+        if (accepted.getTime() > 0) {
+            accepted.setTimeRestrict(true);
+        }
+        if (accepted.getViews() > 0) {
+            accepted.setViewsRestrict(true);
+        }
         service.add(accepted);
 
         return ResponseEntity.ok()

@@ -43,16 +43,22 @@ public class MainController {
                 .body(htmlFileContent);
     }
 
-    @GetMapping("/code/latest")
-    public String getLatestPage(Model model) {
-        model.addAttribute("codes", service.getLatestById());
-        return "latest";
-    }
-
     @GetMapping("/code/{id}")
     public String showById(@PathVariable String id, Model model) {
         model.addAttribute("code", service.getByUUID(id));
         return "snippet";
+    }
+
+
+
+
+
+
+
+    @GetMapping("/code/latest")
+    public String getLatestPage(Model model) {
+        model.addAttribute("codes", service.getLatestById());
+        return "latest";
     }
 
 }

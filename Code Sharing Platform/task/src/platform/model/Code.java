@@ -19,19 +19,19 @@ public class Code {
     private LocalDateTime date;
     private Long time;
     private int views;
-
+    @JsonIgnore
+    private boolean viewsRestrict;
+    @JsonIgnore
+    private boolean timeRestrict;
     @JsonIgnore
     private String UUID;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Code() { }
 
-    public Code(String code_snippet, LocalDateTime date, Long time, int views, String UUID) {
-        this.code_snippet = code_snippet;
-        this.date = date;
-        this.time = time;
-        this.views = views;
-        this.UUID = UUID;
+    @JsonIgnore
+    public DateTimeFormatter getFormatter() {
+        return FORMATTER;
     }
 
     public Long getId() {
@@ -81,5 +81,21 @@ public class Code {
 
     public void setUUID(String UUID) {
         this.UUID = UUID;
+    }
+
+    public boolean isViewsRestrict() {
+        return viewsRestrict;
+    }
+
+    public void setViewsRestrict(boolean viewsRestrict) {
+        this.viewsRestrict = viewsRestrict;
+    }
+
+    public boolean isTimeRestrict() {
+        return timeRestrict;
+    }
+
+    public void setTimeRestrict(boolean timeRestrict) {
+        this.timeRestrict = timeRestrict;
     }
 }
