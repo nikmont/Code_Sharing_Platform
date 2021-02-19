@@ -49,15 +49,9 @@ public class MainController {
         return "snippet";
     }
 
-
-
-
-
-
-
     @GetMapping("/code/latest")
     public String getLatestPage(Model model) {
-        model.addAttribute("codes", service.getLatestById());
+        model.addAttribute("codes", service.getLatestWithoutRestrict());
         return "latest";
     }
 

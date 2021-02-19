@@ -12,11 +12,11 @@
 <body>
     <span id="load_date">${code.getDate()}</span>
     <br>
-    <#if code.isViewsRestrict()> <!--если есть ограничения-->
+    <#if code.isViewsRestrict()>
     <span id="views_restriction">${code.getViews()} more views allowed</span>
     <br>
     </#if>
-    <#if code.isTimeRestrict()> <!--если есть ограничения-->
+    <#if code.isTimeRestrict()>
     <span id="time_restriction">The code will be available for ${code.getTime()} seconds</span>
     <br>
     </#if>

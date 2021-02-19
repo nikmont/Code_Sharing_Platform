@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import platform.dto.CodeDTO;
 import platform.model.Code;
 
 import java.time.LocalDateTime;
@@ -22,33 +23,13 @@ public class ApiController {
         this.service = service;
     }
 
-
-
-
-
-
     @GetMapping("/api/code/latest")
     public List<Code> getLatest() {
-        return service.getLatestById();
+        return service.getLatestWithoutRestrict();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @GetMapping("/api/code/{id}")
-    public ResponseEntity<Code> getById(@PathVariable String id) {
+    public ResponseEntity<CodeDTO> getById(@PathVariable String id) {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set(CONTENT_TYPE, APPLICATION_JSON_VALUE);
 

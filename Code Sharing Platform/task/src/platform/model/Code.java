@@ -1,7 +1,6 @@
 package platform.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,11 +27,6 @@ public class Code {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Code() { }
-
-    @JsonIgnore
-    public DateTimeFormatter getFormatter() {
-        return FORMATTER;
-    }
 
     public Long getId() {
         return id;
@@ -78,6 +72,9 @@ public class Code {
     public String getUUID() {
         return UUID;
     }
+
+    @JsonIgnore
+    public LocalDateTime getDateTime() { return date;}
 
     public void setUUID(String UUID) {
         this.UUID = UUID;

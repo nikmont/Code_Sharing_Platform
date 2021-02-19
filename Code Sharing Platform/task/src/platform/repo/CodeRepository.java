@@ -13,6 +13,8 @@ public interface CodeRepository extends JpaRepository<Code, Long> {
 
     List<Code> findTop10ByOrderByIdDesc();
 
+    List<Code> findTop10ByViewsRestrictFalseAndTimeRestrictFalseOrderByIdDesc();
+
     Optional<Code> findCodeByUUID(String uuid);
 
 }

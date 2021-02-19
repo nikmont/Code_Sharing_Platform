@@ -1,18 +1,14 @@
 package platform.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import platform.dto.CodeDTO;
 import platform.errors.CodeNotFoundException;
 import platform.model.Code;
 import platform.repo.CodeRepository;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,56 +26,43 @@ public class CodeService {
         repository.save(code);
     }
 
-    public Code getByUUID(String id) {
-        Optional<Code> code = repository.findCodeByUUID(id); //получаем по айди
-        Code temp;
+    public CodeDTO getByUUID(String id) {
+
+        Optional<Code> code = repository.findCodeByUUID(id);
 
         if (code.isPresent()) {
-            temp = code.get();
-            if (!temp.isViewsRestrict() && !temp.isTimeRestrict()) { //если без ограничений сразу отдаем
-                temp.setTime(0L);
-                temp.setViews(0);
-                return temp;
-            } else if (temp.getTime() > 1 && temp.getViews() > 1) { //проверяем --мб надо будет просто до нуля отнимать?
-                        updateTime(temp); //отнимаем просмотры
-                        updateViews(temp); //вычитаем время
-                        repository.save(temp);//сохраняем изменения в  бд
-                        return temp; //возвращаем обновленный
-                } else throw new CodeNotFoundException("One of the restrictions is applied");
+            Code temp = code.get();
+            if (!temp.isViewsRestrict() && !temp.isTimeRestrict()) {
+                return new CodeDTO(temp.getCode(), temp.getDate(), 0L, 0, false, false);
+            } else if (temp.getViews() > 0 && !temp.isTimeRestrict()) {
+                updateViews(temp);
+                repository.save(temp);
+                return new CodeDTO(temp.getCode(), temp.getDate(), temp.getTime(), temp.getViews() , true, false);
+            } else if (getDurationsLeftInSeconds(temp) > 0 && !temp.isViewsRestrict()) {
+                return new CodeDTO(temp.getCode(), temp.getDate(), getDurationsLeftInSeconds(temp), temp.getViews() , false, true);
+            } else if (temp.getViews() > 0 && getDurationsLeftInSeconds(temp) > 0) {
+                updateViews(temp);
+                repository.save(temp);
+                return new CodeDTO(temp.getCode(), temp.getDate(), getDurationsLeftInSeconds(temp), temp.getViews() , true, true);
+
+            } else throw new CodeNotFoundException("One of the restrictions is applied");
         } else throw new CodeNotFoundException("UUID not found");
     }
 
-    private void updateTime(Code code) { //слишком быстро
-        LocalDateTime ldt = LocalDateTime.parse(code.getDate(), code.getFormatter());
-        long first = ldt.toLocalTime().toSecondOfDay();
-        long second = LocalTime.now().toSecondOfDay();
-        long diff = second - first;
-        code.setTime(code.getTime() - diff);
+    private long getDurationsLeftInSeconds(Code code) {
+
+        long passed = Duration.between(code.getDateTime(), LocalDateTime.now()).toSeconds();
+        return code.getTime() - passed;
     }
 
     private void updateViews(Code code) {
+
         code.setViews(code.getViews() - 1);
+
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public List <Code> getLatestById() { //только по условиям просмотров и времени
-        return repository.findTop10ByOrderByIdDesc();
-//        return repository.findByViewsGreaterThan0AndTimeGreaterThan0Top10ByOrderByIdDesc();
+    public List<Code> getLatestWithoutRestrict() {
+        return repository.findTop10ByViewsRestrictFalseAndTimeRestrictFalseOrderByIdDesc();
     }
-
-
 
 }
